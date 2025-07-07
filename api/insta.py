@@ -1,10 +1,10 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import JSONResponse
 import httpx
 import re
 import asyncio
 
-app = FastAPI()
+router = APIRouter()
 
 INSTAGRAM_REGEX = r"(https?:\/\/)?(www\.)?(instagram\.com|instagr\.am)\/.*"
 
@@ -18,12 +18,12 @@ async def fetch_with_retries(url: str, retries: int = 3, timeout: int = 20):
         except Exception as e:
             if attempt == retries:
                 raise e
-            await asyncio.sleep(1.5)  # wait between retries
+            await asyncio.sleep(1.5)
 
-@app.get("/api/insta")
+@router.get("/api/insta")
 async def insta_proxy(url: str = Query(..., description="Instagram reel URL")):
     if not re.match(INSTAGRAM_REGEX, url):
-        raise HTTPException(status_code=400, detail=" Invalid URL. Only Instagram URLs are allowed.")
+        raise HTTPException(status_code=400, detail="❌ Invalid URL. Only Instagram URLs are allowed.")
     
     backend_url = f"https://tele-social.vercel.app/down?url={url}"
     try:
