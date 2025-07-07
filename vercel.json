@@ -1,14 +1,14 @@
 {
   "builds": [
     {
-      "src": "api/insta.py",
+      "src": "entry.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/api/insta",
-      "dest": "api/insta.py"
+      "dest": "entry.py"
     }
   ]
 }
